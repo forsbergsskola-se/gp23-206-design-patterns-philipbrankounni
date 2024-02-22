@@ -3,14 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Projectile : MonoBehaviour
 {
+
+    private IObjectPool<Projectile> _objectPool;
+    
+    public IObjectPool<Projectile>ObjectPool
+    {
+        set => _objectPool = value;
+    }
+    
     private float _totalTime;
     void Start()
     {
         FakeInitializeProjectile();
     }
+    
+    
 
     /// <summary>
     /// Setting up complex Prefabs containing Models, Sprites, Materials etc.
