@@ -1,12 +1,12 @@
 using System.Threading;
 using UnityEngine;
 using UnityEngine.Pool;
-using UnityEngine.Pool;
 
 public class Enemy : MonoBehaviour
 {
 
-    private IObjectPool<EnemySpawner> _enemyPool
+    private IObjectPool<EnemySpawner>_enemyPool;
+    public IObjectPool<EnemySpawner> ObjectPool
     {
         set => _enemyPool = value;
     }

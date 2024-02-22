@@ -43,7 +43,7 @@ public class EnemySpawner : MonoBehaviour
 
     private Enemy CreateFunc()
     {
-        Enemy fiende = Instantiate(Enemy);
+        Enemy fiende = Instantiate(EnemyPrefab);
         fiende.gameObject.SetActive(false);
         fiende.ObjectPool = _enemyPool;
         return fiende;
