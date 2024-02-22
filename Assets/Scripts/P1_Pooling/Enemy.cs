@@ -1,8 +1,15 @@
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Pool;
+using UnityEngine.Pool;
 
 public class Enemy : MonoBehaviour
 {
+
+    private IObjectPool<EnemySpawner> _enemyPool
+    {
+        set => _enemyPool = value;
+    }
     private Castle _castle;
     
     void Start()
