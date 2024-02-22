@@ -20,6 +20,10 @@ public class Castle : MonoBehaviour
     {
         _objectPool = new ObjectPool<Projectile>(CreateFunc, ActionOnGet, ActionOnRelease, ActionOnDestroy,
             collectionCheck, defaultCapacity, maxSize);
+        for (int i = 0; i < 20; i++)
+        {
+            _objectPool.Release(CreateFunc());
+        }
     }
 
     private void ActionOnDestroy(Projectile obj)
@@ -40,6 +44,7 @@ public class Castle : MonoBehaviour
     private Projectile CreateFunc()
     {
         Projectile pewpew = Instantiate(Projectile);
+        pewpew.gameObject.SetActive(false);
         pewpew.ObjectPool = _objectPool;
         return pewpew;
     }
@@ -74,7 +79,8 @@ public class Castle : MonoBehaviour
 
     void Attack()
     {
-        Instantiate(this.Projectile, this.transform.position, GetTargetDirection());
+        var projectile = _objectPool.Get();
+        projectile.transform.SetLocalPositionAndRotation(transform.position, GetTargetDirection());
     }
 
     Quaternion GetTargetDirection()
