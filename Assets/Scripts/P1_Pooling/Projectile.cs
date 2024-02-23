@@ -15,7 +15,7 @@ public class Projectile : MonoBehaviour
         set => _objectPool = value;
     }
     
-    private float _totalTime;
+    public float _totalTime;
     void Start()
     {
         FakeInitializeProjectile();
@@ -39,10 +39,9 @@ public class Projectile : MonoBehaviour
     {
         this._totalTime += Time.deltaTime;
         this.transform.Translate(Vector3.up * Time.deltaTime);
-        if (this._totalTime > 10f)
+        if (this._totalTime > 3f)
         {
             _objectPool.Release(this);
-            _totalTime = 0f;
         }
     }
 

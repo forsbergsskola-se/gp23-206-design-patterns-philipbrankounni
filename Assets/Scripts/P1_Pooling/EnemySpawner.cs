@@ -73,8 +73,10 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
+        var enemyGuy = _enemyPool.Get();
         var randomPositionX = Random.Range(-6f, 6f);
         var randomPositionY = Random.Range(-6f, 6f);
-        Instantiate(this.EnemyPrefab, new Vector2(randomPositionX, randomPositionY), Quaternion.identity);
+        enemyGuy.transform.SetLocalPositionAndRotation(new Vector2(randomPositionX, randomPositionY),
+            transform.rotation);
     }
 }

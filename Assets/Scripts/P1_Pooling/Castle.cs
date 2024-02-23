@@ -34,6 +34,7 @@ public class Castle : MonoBehaviour
     private void ActionOnRelease(Projectile obj)
     {
         obj.gameObject.SetActive(false);
+        obj._totalTime = 0f;
     }
 
     private void ActionOnGet(Projectile obj)
