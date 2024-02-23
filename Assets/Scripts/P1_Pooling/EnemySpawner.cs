@@ -26,27 +26,27 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private void ActionOnDestroy(Enemy obj)
+    private void ActionOnDestroy(Enemy objectEnemy)
     {
-        Destroy(obj.gameObject);
+        Destroy(objectEnemy.gameObject);
     }
 
-    private void ActionOnRelease(Enemy obj)
+    private void ActionOnRelease(Enemy objectEnemy)
     {
-        obj.gameObject.SetActive(false);
+        objectEnemy.gameObject.SetActive(false);
     }
 
-    private void ActionOnGet(Enemy obj)
+    private void ActionOnGet(Enemy objectEnemy)
     {
-        obj.gameObject.SetActive(true);
+        objectEnemy.gameObject.SetActive(true);
     }
 
     private Enemy CreateFunc()
     {
-        Enemy fiende = Instantiate(EnemyPrefab);
-        fiende.gameObject.SetActive(false);
-        fiende.ObjectPool = _enemyPool;
-        return fiende;
+        Enemy enemy = Instantiate(EnemyPrefab);
+        enemy.gameObject.SetActive(false);
+        enemy.ObjectPool = _enemyPool;
+        return enemy;
     }
 
     // Update is called once per frame

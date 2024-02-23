@@ -5,8 +5,8 @@ using UnityEngine.Pool;
 public class Enemy : MonoBehaviour
 {
 
-    private IObjectPool<EnemySpawner>_enemyPool;
-    public IObjectPool<EnemySpawner> ObjectPool
+    private IObjectPool<Enemy>_enemyPool;
+    public IObjectPool<Enemy> ObjectPool
     {
         set => _enemyPool = value;
     }
