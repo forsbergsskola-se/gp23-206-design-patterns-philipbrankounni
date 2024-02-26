@@ -1,15 +1,54 @@
+using System;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Castle : MonoBehaviour
 {
     public Projectile Projectile;
-
     private Transform _target;
     private int _enemyLayerMask;
     private float _currentCooldown;
+    private IObjectPool<Projectile> _objectPool;
+    
+    [SerializeField] private bool collectionCheck = true;
+    [SerializeField] private int defaultCapacity = 20;
+    [SerializeField] private int maxSize = 100;
     
     const float _maxCooldown = 0.8f;
 
+    private void Awake()
+    {
+        _objectPool = new ObjectPool<Projectile>(CreateFunc, ActionOnGet, ActionOnRelease, ActionOnDestroy,
+            collectionCheck, defaultCapacity, maxSize);
+        for (int i = 0; i < 20; i++)
+        {
+            _objectPool.Release(CreateFunc());
+        }
+    }
+
+    private void ActionOnDestroy(Projectile obj)
+    {
+        Destroy(obj.gameObject);
+    }
+
+    private void ActionOnRelease(Projectile obj)
+    {
+        obj.gameObject.SetActive(false);
+        obj._totalTime = 0f;
+    }
+
+    private void ActionOnGet(Projectile obj)
+    {
+        obj.gameObject.SetActive(true);
+    }
+
+    private Projectile CreateFunc()
+    {
+        Projectile pewpew = Instantiate(Projectile);
+        pewpew.gameObject.SetActive(false);
+        pewpew.ObjectPool = _objectPool;
+        return pewpew;
+    }
 
     void Start()
     {
@@ -25,7 +64,7 @@ public class Castle : MonoBehaviour
 
     void AcquireTargetIfNecessary()
     {
-        if (this._target == null)
+        if (this._target == null || !this._target.gameObject.activeInHierarchy);
         {
             this._target = Physics2D.OverlapCircle(this.transform.position, 5f, this._enemyLayerMask)?.transform;
         }
@@ -41,7 +80,8 @@ public class Castle : MonoBehaviour
 
     void Attack()
     {
-        Instantiate(this.Projectile, this.transform.position, GetTargetDirection());
+        var projectile = _objectPool.Get();
+        projectile.transform.SetLocalPositionAndRotation(transform.position, GetTargetDirection());
     }
 
     Quaternion GetTargetDirection()

@@ -3,12 +3,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using UnityEngine.Pool;
 
 public class EnemySpawner : MonoBehaviour
 {
+    private IObjectPool<Enemy> _enemyPool;
     public Enemy EnemyPrefab;
     private const float _totalCooldown = 2f;
+    [SerializeField] private bool collectionCheck = true;
+    [SerializeField] private int defaultCapacity = 20;
+    [SerializeField] private int maxSize = 100;
+    
     private float _currentCooldown;
+
+    private void Awake()
+    {
+        _enemyPool = new ObjectPool<Enemy>(CreateFunc, ActionOnGet, ActionOnRelease, ActionOnDestroy,
+            collectionCheck, defaultCapacity, maxSize);
+        for (int i = 0; i < 20; i++)
+        {
+            _enemyPool.Release(CreateFunc());
+        }
+    }
+
+    private void ActionOnDestroy(Enemy objectEnemy)
+    {
+        Destroy(objectEnemy.gameObject);
+    }
+
+    private void ActionOnRelease(Enemy objectEnemy)
+    {
+        objectEnemy.gameObject.SetActive(false);
+    }
+
+    private void ActionOnGet(Enemy objectEnemy)
+    {
+        objectEnemy.gameObject.SetActive(true);
+    }
+
+    private Enemy CreateFunc()
+    {
+        Enemy enemy = Instantiate(EnemyPrefab);
+        enemy.gameObject.SetActive(false);
+        enemy.ObjectPool = _enemyPool;
+        return enemy;
+    }
 
     // Update is called once per frame
     void FixedUpdate()
@@ -34,8 +73,10 @@ public class EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
+        var enemyGuy = _enemyPool.Get();
         var randomPositionX = Random.Range(-6f, 6f);
         var randomPositionY = Random.Range(-6f, 6f);
-        Instantiate(this.EnemyPrefab, new Vector2(randomPositionX, randomPositionY), Quaternion.identity);
+        enemyGuy.transform.SetLocalPositionAndRotation(new Vector2(randomPositionX, randomPositionY),
+            transform.rotation);
     }
 }

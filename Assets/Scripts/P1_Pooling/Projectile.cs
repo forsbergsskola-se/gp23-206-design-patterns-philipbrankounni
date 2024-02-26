@@ -3,14 +3,25 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Pool;
 
 public class Projectile : MonoBehaviour
 {
-    private float _totalTime;
+
+    private IObjectPool<Projectile> _objectPool;
+    
+    public IObjectPool<Projectile>ObjectPool
+    {
+        set => _objectPool = value;
+    }
+    
+    public float _totalTime;
     void Start()
     {
         FakeInitializeProjectile();
     }
+    
+    
 
     /// <summary>
     /// Setting up complex Prefabs containing Models, Sprites, Materials etc.
@@ -28,15 +39,15 @@ public class Projectile : MonoBehaviour
     {
         this._totalTime += Time.deltaTime;
         this.transform.Translate(Vector3.up * Time.deltaTime);
-        if (this._totalTime > 10f)
+        if (this._totalTime > 3f)
         {
-            Destroy(this.gameObject);
+            _objectPool.Release(this);
         }
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         Debug.Log("On Collision!");
-        Destroy(this.gameObject);
+        _objectPool.Release(this);
     }
 }
