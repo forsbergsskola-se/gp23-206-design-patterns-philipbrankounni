@@ -64,7 +64,7 @@ public class Castle : MonoBehaviour
 
     void AcquireTargetIfNecessary()
     {
-        if (this._target == null)
+        if (this._target == null || !this._target.gameObject.activeInHierarchy);
         {
             this._target = Physics2D.OverlapCircle(this.transform.position, 5f, this._enemyLayerMask)?.transform;
         }
