@@ -17,7 +17,7 @@ Unity has its own API for Object Pooling called Pool.
 
 ` using UnityEngine.Pool; `
 
-![ObjectPool](https://drive.google.com/file/d/1rtBoP1fU5c9UP0csylf7M6gL2ZoaWY5I/view?usp=drive_link)
+![ObjectPool](https://github.com/forsbergsskola-se/gp23-206-design-patterns-philipbrankounni/blob/main/Assets/Scripts/P1_Pooling/ObjectPool.png)
 
 In Unity, the hierarchy is filled with a certain amount of gameObjects (in this case it’s Bullet and Enemy) that we can SetActive to TRUE or FALSE whenever we want to instantiate them.
 
